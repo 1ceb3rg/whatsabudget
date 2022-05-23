@@ -62,7 +62,22 @@ export function parseChat(
     }, [] as Array<Person>);
 }
 // divide the budget into months
-export function getMonths(person: Person) {
+export function getMonths(person: Person, startDate?: Date,
+  endDate?: Date) {
+    const sDate = startDate
+    ? Temporal.PlainDateTime.from(startDate.toISOString().replace("Z", ""))
+    : Temporal.PlainDate.from("2016-01-01");
+  const eDate = endDate
+    ? Temporal.PlainDateTime.from(endDate.toISOString().replace("Z", ""))
+    : Temporal.PlainDate.from(Temporal.Now.plainDateISO());
+ let numMonths = sDate.until(eDate, {largestUnit:'months'});
+numMonths.months
+let set={}as Record<string, number>
+for (let x=0;x<numMonths.months;x++) {
+
+set[sDate.add({months:x}).toPlainYearMonth().toString()]=0 
+ 
+}
   const months = person.entries.reduce((acc, curr) => {
     const month = curr.date.toPlainYearMonth().toString();
 
@@ -70,7 +85,7 @@ export function getMonths(person: Person) {
       ...acc,
       [month]: acc[month] ? acc[month] + curr.amount : curr.amount,
     };
-  }, {} as Record<string, number>);
+  }, set);
 
   return months;
 }

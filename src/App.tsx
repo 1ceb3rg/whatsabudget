@@ -200,13 +200,13 @@ function App() {
       <main className="mx-auto mt-2  px-4">
         <div className="flex justify-center">
           <div
-            className={` dropzone h-40 w-40 rounded-lg border-4 border-dashed border-gray-200 bg-white p-4  text-black hover:bg-blue-50 ${
+            className={` dropzone min-h-40 min-w-40 rounded-lg border-4 border-dashed border-gray-200 bg-white p-4  text-black hover:bg-blue-50 ${
               isDragAccept && "bg-blue-50"
             } ${isDragReject && "bg-red-100"} `}
             {...getRootProps({})}
           >
             <input {...getInputProps()} />
-            <p>
+            <p className="p-2">
               Export your chat and drop the `_chat.txt` file here, or click here
               to select it
             </p>
@@ -290,14 +290,19 @@ function App() {
                 <Line
                   options={options}
                   data={{
-                    labels: Object.keys(getMonths(chatData[0])),
+                    labels: Object.keys(
+                      getMonths(chatData[0], startDate, endDate)
+                    ),
 
                     datasets: [
                       ...chatData.map((person) => {
                         return {
                           label: person.name,
-                          data: Object.keys(getMonths(person)).map(
-                            (month) => getMonths(person)[month]
+                          data: Object.keys(
+                            getMonths(person, startDate, endDate)
+                          ).map(
+                            (month) =>
+                              getMonths(person, startDate, endDate)[month]
                           ),
                         };
                       }),
@@ -307,8 +312,11 @@ function App() {
                           .map((person) => {
                             return {
                               label: person.name,
-                              data: Object.keys(getMonths(person)).map(
-                                (month) => getMonths(person)[month]
+                              data: Object.keys(
+                                getMonths(person, startDate, endDate)
+                              ).map(
+                                (month) =>
+                                  getMonths(person, startDate, endDate)[month]
                               ),
                             };
                           })
